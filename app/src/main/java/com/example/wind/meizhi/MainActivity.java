@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.ImageView;
 
+import com.example.wind.meizhi.mvp.view.TabsFragment;
 import com.example.wind.meizhi.ui.BaseActivity;
 import com.example.wind.meizhi.utils.Imager;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -20,7 +21,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import butterknife.Bind;
 import io.realm.Case;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     @Bind(R.id.nav_view)
     NavigationView navView;
     @Bind(R.id.drawer_layout)
@@ -48,22 +49,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private void  replaceFragment(Fragment fragment, String tag){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_main,fragment,tag);
-        transaction.commit();
-    }
 
     private void setupDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-
     }
 
     private void initNavigationView() {
-        Imager.load(this,R.drawable.head, (ImageView) navView.getHeaderView(0).findViewById(R.id.headImage));
+        Imager.load(this, R.drawable.head, (ImageView) navView.getHeaderView(0).findViewById(R.id.headImage));
         navView.setNavigationItemSelectedListener(this);
         navView.inflateMenu(R.menu.main_drawer);
 
@@ -90,10 +85,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             //case R.id.nav_knowledge: replace(TabsFragment.MENU_NEWS);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
