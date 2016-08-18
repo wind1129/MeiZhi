@@ -1,5 +1,9 @@
 package com.example.wind.meizhi.mvp.view;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -91,8 +95,18 @@ public class ZhihuFragment extends RecyclerFragment implements NewsView<ZhihuJso
     }
 
     @Override
-    public void onListFragmentInteraction(RecyclerView.ViewHolder holder) {
+    public void onListFragmentInteraction(RecyclerView.ViewHolder viewHolder) {
+        if(viewHolder instanceof  ZhihuListAdapter.ViewHolder){
+            ZhihuListAdapter.ViewHolder holder = (ZhihuListAdapter.ViewHolder) viewHolder;
+            Intent intent = new Intent(getActivity(), ZhihuDetailActivity.class);
+            intent.putExtra(Constants.ID, holder.zhihuStory.getId());
+            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    getActivity(),holder.mImage,getString(R.string.shared_img));
+            ActivityCompat.startActivity(getActivity(),intent,optionsCompat.toBundle());
 
+            holder.mTitle.setTextColor(ZhihuListAdapter.textGrey);
+
+        }
     }
 
     @Override

@@ -105,6 +105,12 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             Imager.load(context, viewHolder.zhihuStory.getImages().get(0).getVal(), viewHolder.mImage);
             viewHolder.mTitle.setText(viewHolder.zhihuStory.getTitle());
             viewHolder.mTitle.setTextColor(textDark);
+            viewHolder.mItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onListFragmentInteraction(viewHolder);
+                }
+            });
 
 
         } else if (holder instanceof BannerViewHolder) {
