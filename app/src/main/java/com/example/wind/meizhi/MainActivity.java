@@ -107,4 +107,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    public DrawerLayout getDrawerLayout() {
+        return drawerLayout;
+    }
 }

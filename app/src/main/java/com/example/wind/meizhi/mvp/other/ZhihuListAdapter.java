@@ -15,17 +15,20 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.example.wind.meizhi.R;
 import com.example.wind.meizhi.mvp.interf.OnListFragmentInteract;
+import com.example.wind.meizhi.mvp.model.ZhihuJson;
 import com.example.wind.meizhi.mvp.model.ZhihuStory;
 import com.example.wind.meizhi.mvp.model.ZhihuTop;
 import com.example.wind.meizhi.mvp.view.BannerView;
 import com.example.wind.meizhi.net.DB;
 import com.example.wind.meizhi.ui.BaseActivity;
+import com.example.wind.meizhi.utils.Constants;
 import com.example.wind.meizhi.utils.Imager;
 
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.Sort;
 
 /**
  * Created by Summers on 2016/8/16.
@@ -54,6 +57,7 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public ZhihuListAdapter(OnListFragmentInteract listener, BaseActivity activity) {
         mListener = listener;
         mRealm = activity.mRealm;
+        //mRealm.where(ZhihuJson.class).findAllSorted(Constants.DATE, Sort.DESCENDING);
         zhihuStories = DB.findAll(mRealm, ZhihuStory.class);
         tops = DB.findAll(mRealm, ZhihuTop.class);
         mRealm.addChangeListener(this);
@@ -131,6 +135,11 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return TYPE_ITEM;
     }
 
+    public void addNews(ZhihuJson news) {
+        notifyDataSetChanged();
+    }
+
+
     public class FooterViewHolder extends RecyclerView.ViewHolder {
 
         public FooterViewHolder(View view) {
@@ -166,6 +175,9 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onChange() {
+        if (null != banner) {
+            banner.notifyDataSetChanged();
+        }
 
     }
 }

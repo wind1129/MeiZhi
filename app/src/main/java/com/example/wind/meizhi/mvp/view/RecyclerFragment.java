@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.wind.meizhi.R;
 import com.example.wind.meizhi.ui.BaseFragment;
+import com.example.wind.meizhi.utils.Constants;
+import com.example.wind.meizhi.utils.SPUtil;
 
 import butterknife.Bind;
 
@@ -27,6 +29,13 @@ public abstract class RecyclerFragment extends BaseFragment implements SwipeRefr
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState == null) {
+            //restoring position when reentering fragment.
+            firstPosition = SPUtil.getInt(type + Constants.POSITION);
+            if (firstPosition > 0) {
+                recyclerView.scrollToPosition(firstPosition);
+            }
+        }
     }
 
     @Override
@@ -37,6 +46,7 @@ public abstract class RecyclerFragment extends BaseFragment implements SwipeRefr
     @Override
     public void onPause() {
         super.onPause();
+        SPUtil.save(type + Constants.POSITION, firstPosition);
     }
 
     @Override
@@ -50,6 +60,16 @@ public abstract class RecyclerFragment extends BaseFragment implements SwipeRefr
         swipeRefresh.setColorSchemeColors(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent);
         swipeRefresh.setOnRefreshListener(this);
 
+    }
+
+    public void showProgress(final boolean refreshState) {
+        if (null != swipeRefresh) {
+            swipeRefresh.setRefreshing(refreshState);
+        }
+    }
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
     }
 
 

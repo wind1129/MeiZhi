@@ -54,4 +54,8 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+    public boolean isAlive() {
+        return getActivity() != null;
+    }
 }
