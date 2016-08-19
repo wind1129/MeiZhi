@@ -1,5 +1,6 @@
 package com.example.wind.meizhi;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -95,9 +96,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            //case R.id.nav_knowledge: replace(TabsFragment.MENU_NEWS);
-        }
+        if (id == R.id.nav_knowledge) {
+            replace(TabsFragment.MENU_NEWS);
+        } else if (id == R.id.nav_beauty) {
+            replace(TabsFragment.MENU_PIC);
+
+        }  /*else if (id == R.id.nav_share) {
+            Share.shareText(this, getString(R.string.share_app_description));
+
+        } else if (id == R.id.nav_setting) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        }*/
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

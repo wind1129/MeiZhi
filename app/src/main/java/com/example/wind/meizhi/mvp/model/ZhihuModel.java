@@ -6,6 +6,7 @@ import com.example.wind.meizhi.mvp.interf.NewsModel;
 import com.example.wind.meizhi.mvp.interf.OnLoadDataListener;
 import com.example.wind.meizhi.mvp.interf.OnLoadDetailListener;
 import com.example.wind.meizhi.net.API;
+import com.example.wind.meizhi.net.DB;
 import com.example.wind.meizhi.net.Json;
 import com.example.wind.meizhi.net.Net;
 import com.example.wind.meizhi.ui.BaseActivity;
@@ -25,11 +26,13 @@ import okhttp3.Response;
  * Created by Summers on 2016/8/17.
  */
 public class ZhihuModel implements NewsModel<ZhihuStory, ZhihuDetail> {
+    public static final int GET_DURATION = 2000;
     private BaseActivity mActivity;
     private Realm realm;
     private int type;
     private String date;
     private static final String TAG = "test";
+    private long lastGetTime;
 
 
     public ZhihuModel(BaseActivity activity) {
@@ -101,7 +104,34 @@ public class ZhihuModel implements NewsModel<ZhihuStory, ZhihuDetail> {
     }
 
     @Override
-    public void getNewsDetail(ZhihuStory newsItem, OnLoadDetailListener<ZhihuDetail> listener) {
+    public void getNewsDetail(final ZhihuStory newsItem, final OnLoadDetailListener<ZhihuDetail> listener) {
+        lastGetTime = System.currentTimeMillis();
+
+        Callback<ZhihuDetail> callback = new Callback<ZhihuDetail>() {
+            @Override
+            public ZhihuDetail parseNetworkResponse(Response response) throws Exception {
+                return Json.parseZhihuDetail(response.body().string());
+            }
+
+            @Override
+            public void onError(Call call, Exception e) {
+                if (System.currentTimeMillis() - lastGetTime < GET_DURATION) {
+                    Net.get(API.BASE_URL + newsItem.getId(), this, API.TAG_ZHIHU);
+                    return;
+                }
+                e.printStackTrace();
+                listener.onFailure("load zhihu detail failed", e);
+
+            }
+
+            @Override
+            public void onResponse(ZhihuDetail response) {
+                DB.saveOrUpdate(mActivity.mRealm, response);
+                listener.onDetailSuccess(response);
+
+            }
+        };
+        Net.get(API.BASE_URL + newsItem.getId(), callback, mActivity);
 
     }
 }

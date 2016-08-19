@@ -26,6 +26,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".mvp.view.ZhihuDetailActivity"
+            android:label="@string/activity_news_detail"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
+            android:process=":remote"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -1,14 +1,19 @@
 package com.example.wind.meizhi.mvp.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bigkoo.convenientbanner.holder.Holder;
+import com.example.wind.meizhi.MainActivity;
 import com.example.wind.meizhi.R;
 import com.example.wind.meizhi.mvp.model.ZhihuTop;
+import com.example.wind.meizhi.utils.Constants;
 import com.example.wind.meizhi.utils.Imager;
 
 /**
@@ -24,11 +29,23 @@ public class BannerView implements Holder<ZhihuTop> {
     }
 
     @Override
-    public void UpdateUI(Context context, int position, ZhihuTop entity) {
+    public void UpdateUI(final Context context, int position, final ZhihuTop entity) {
         final ImageView imageView = (ImageView) view.findViewById(R.id.story_img);
         TextView textView = (TextView) view.findViewById(R.id.news_title);
         Imager.loadWithHighPriority(entity.getImage(), imageView);
         textView.setText(entity.getTitle());
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ZhihuDetailActivity.class);
+                intent.putExtra(Constants.ID, entity.getId());
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((MainActivity) context,
+                        imageView, context.getString(R.string.shared_img));
+                ActivityCompat.startActivity((MainActivity) context, intent, optionsCompat.toBundle());
+
+            }
+        });
 
     }
 }

@@ -13,6 +13,7 @@ import com.example.wind.meizhi.ui.BaseFragment;
 import com.example.wind.meizhi.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -54,6 +55,9 @@ public class TabsFragment extends BaseFragment {
         adapter = new TabPagerAdapter(getChildFragmentManager());
         initFragments();
         pager.setAdapter(adapter);
+        if (MENU_PIC.equals(menuType)) {
+            tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        }
         tabs.setupWithViewPager(pager);
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -75,16 +79,37 @@ public class TabsFragment extends BaseFragment {
 
     private void initFragments() {
         menuType = getArguments().getString(Constants.TYPE);
-        List<String> mTitles;
+        List<String> mTitles = null;
         if (MENU_NEWS.equals(menuType)) {
             mTitles = new ArrayList<>();
             fragments.add(new ZhihuFragment());
             fragments.add(new FreshFragment());
             mTitles.add(getString(R.string.zhihu_news));
             mTitles.add(getString(R.string.fresh_news));
-            adapter.setFragments(fragments, mTitles);
+
+
+        }else if (MENU_PIC.equals(menuType)) {
+            String[] titles = new String[]{
+                    getString(R.string.gank),
+                    getString(R.string.db_rank),
+                    getString(R.string.db_leg),
+                    getString(R.string.db_silk),
+                    getString(R.string.db_breast),
+                    getString(R.string.db_butt)};
+            mTitles = Arrays.asList(titles);
+            fragments.add(PictureFragment.newInstance(PictureFragment.TYPE_GANK));
+            fragments.add(PictureFragment.newInstance(PictureFragment.TYPE_DB_RANK));
+            fragments.add(PictureFragment.newInstance(PictureFragment.TYPE_DB_LEG));
+            fragments.add(PictureFragment.newInstance(PictureFragment.TYPE_DB_SILK));
+            fragments.add(PictureFragment.newInstance(PictureFragment.TYPE_DB_BREAST));
+            fragments.add(PictureFragment.newInstance(PictureFragment.TYPE_DB_BUTT));
+            if (fragments.size() != titles.length) {
+                throw new IllegalArgumentException("You need add all fragments in "+getClass().getSimpleName());
+            }
 
         }
+
+        adapter.setFragments(fragments, mTitles);
 
     }
 
